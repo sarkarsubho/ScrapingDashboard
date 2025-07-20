@@ -1,7 +1,12 @@
 import { useState } from "react";
+import { PublishToWordPress } from "../utils/api";
 
-const VideoTable = ({ videos }) => {
+const VideoTable = ({ videos, setVideos }) => {
   const [selected, setSelected] = useState([]);
+  const [isPosting, setIsPosting] = useState({
+    status: false,
+    postId: null,
+  });
 
   const toggleSelect = (videoId) => {
     setSelected((prev) =>
@@ -13,9 +18,28 @@ const VideoTable = ({ videos }) => {
 
   const isSelected = (videoId) => selected.includes(videoId);
 
-  const handlePostToWP = (video) => {
+  const handlePostToWP = async (video) => {
     console.log("Posting to WP:", video);
     // Your API call here
+    setIsPosting({ status: true, postId: video._id });
+    await PublishToWordPress(video)
+      .then((response) => {
+        console.log("Video posted to WordPress successfully:", response);
+        let updatedVideo = videos.map((v) =>
+          v._id === video._id ? { ...v, isuploadedtowp: true } : v
+        );
+        // Update the state or perform any other action with updatedVideo
+        setSelected((prev) => prev.filter((id) => id !== video._id));
+        console.log("Updated video state:", updatedVideo);
+        setVideos(updatedVideo);
+      })
+      .catch((error) => {
+        console.error("Error posting video to WordPress:", error);
+      })
+      .finally(() => {
+        setIsPosting({ status: false, postId: null });
+        alert("Video posted successfully to WordPress!");
+      });
   };
 
   const handlePostSelected = () => {
@@ -46,7 +70,7 @@ const VideoTable = ({ videos }) => {
       </div>
 
       <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
-        <thead className="bg-blue-600 text-white text-left text-sm uppercase">
+        <thead className="bg-blue-600 text-white text-center text-sm uppercase">
           <tr>
             <th className="p-3">
               <input
@@ -63,13 +87,15 @@ const VideoTable = ({ videos }) => {
             <th className="p-3">Video URL</th>
             <th className="p-3">Thumbnail</th>
             <th className="p-3">Categories</th>
+            <th className="p-3">Tags</th>
+            <th className="p-3">Uploaded By</th>
             <th className="p-3">Action</th>
           </tr>
         </thead>
-        <tbody className="text-sm text-gray-700">
+        <tbody className="text-sm text-gray-700 text-center">
           {videos.map((video) => (
             <tr
-              key={video.id}
+              key={video._id}
               className="border-t hover:bg-gray-50 transition duration-150"
             >
               <td className="p-3">
@@ -79,8 +105,8 @@ const VideoTable = ({ videos }) => {
                   onChange={() => toggleSelect(video.id)}
                 />
               </td>
-              <td className="p-3">{video.id}</td>
-              <td className="p-3">{video.title}</td>
+              <td className="p-3 max-w-[100px] truncate">{video._id}</td>
+              <td className="p-3">{video.filename}</td>
               <td className="p-3 truncate max-w-xs">{video.description}</td>
               <td className="p-3">
                 <a
@@ -99,14 +125,27 @@ const VideoTable = ({ videos }) => {
                   className="w-20 h-auto rounded-md shadow-sm"
                 />
               </td>
-              <td className="p-3">{video.categories.join(", ")}</td>
+              <td className="p-3">{video.categorys.join(", ")}</td>
+              <td className="p-3">{video.tags.join(", ")}</td>
+              <td className="p-3">{video.uploadedBy}</td>
               <td className="p-3">
-                <button
-                  onClick={() => handlePostToWP(video)}
-                  className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition"
-                >
-                  Post to WP
-                </button>
+                {video.isuploadedtowp ? (
+                  <button
+                    disabled
+                    className="bg-cyan-600 w-[100px] text-white px-3 py-2 rounded  transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Posted
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => handlePostToWP(video)}
+                    className="bg-green-600 w-[100px] text-white px-3 py-2 rounded hover:bg-green-700 transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isPosting.status && isPosting.postId === video._id
+                      ? "Posting..."
+                      : "Post to WP"}
+                  </button>
+                )}
               </td>
             </tr>
           ))}
