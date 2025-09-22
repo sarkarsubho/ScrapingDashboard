@@ -12,6 +12,7 @@ const Home = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle the form submission logic here
+    setError(null); // Reset error state
     setLoading(true);
     axios
       .post("http://localhost:5000/scrape", { url })
@@ -23,11 +24,12 @@ const Home = () => {
       .catch((error) => {
         console.error("Error starting scraping:", error);
         // Handle the error, e.g., show an error message
-        setError("Failed to start scraping. Please try again.");
+        setError("Failed to start scraping. Please try again. or enter a valid URL.");
       })
       .finally(() => {
         // Optionally, you can reset the form or perform other actions
         setUrl(""); // Clear the input field after submission
+        setLoading(false);
       });
   };
   const handleChange = (e) => {

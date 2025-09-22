@@ -27,17 +27,18 @@ const Pagination = ({
   postsPerPage,
   setPostsPerPage,
   onPageChange,
+  limitOptions = [5, 10, 15, 20, 50],
 }) => {
   const pageNumbers = getPageNumbers(currentPage, totalPages);
 
   return (
-    <div className="flex items-center gap-2 my-6 justify-center">
+    <div className="flex items-center gap-2 my-2 justify-center">
       <select
         className="border rounded px-2 py-1 text-sm"
         value={postsPerPage}
         onChange={(e) => setPostsPerPage(Number(e.target.value))}
       >
-        {[5, 10, 15, 20, 50].map((n) => (
+        {limitOptions.map((n) => (
           <option key={n} value={n}>
             {n} per page
           </option>

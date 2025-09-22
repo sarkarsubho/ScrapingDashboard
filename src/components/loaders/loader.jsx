@@ -1,7 +1,7 @@
 import React from "react";
 import "./loader.css";
 
-const Loader = () => {
+const Loader = ({ msg }) => {
   return (
     <div className="earth">
       <div className="earth-loader">
@@ -34,7 +34,7 @@ const Loader = () => {
           ></path>
         </svg>
       </div>
-      <p className="text-blue-500">Connecting To Server...</p>
+      <p className="text-blue-500">{msg || "Connecting To Server..."}</p>
     </div>
   );
 };

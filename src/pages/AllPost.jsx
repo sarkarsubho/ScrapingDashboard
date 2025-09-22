@@ -73,7 +73,7 @@ const AllPost = () => {
 
   return (
     <div>
-      <h1 className="text-center text-2xl font-bold my-4">All Posts</h1>
+      {/* <h1 className="text-center text-2xl font-bold my-4">All Posts</h1> */}
       <VideoTable videos={posts} setVideos={setPosts} />
       <Pagination
         currentPage={Number(currentPage)}
@@ -81,14 +81,10 @@ const AllPost = () => {
         postsPerPage={postsPerPage}
         setPostsPerPage={setPostsPerPage}
         onPageChange={setCurrentPage}
+        limitOptions={[5, 10, 15, 20, 35, 50]}
       />
-      <div className="container mx-auto p-4">
-        {/* <p className="text-gray-700">
-          Here you can view all your scraped posts.
-        </p> */}
-        {/* Add more details or components related to all posts here */}
-        {/* create a card for show a video details which have title description , thumbnail and with a post button and it should a array of posts and should have a multiplse select functionality and post bulk */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {/* <div className="container mx-auto p-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"> */}
           {/* Map through your posts array and create a card for each post */}
           {/* {
     "filename": "this is the title",
@@ -99,55 +95,12 @@ const AllPost = () => {
     "description": "this is the video description ",
     "isuploadedtowp": false,
     "uploadedBy": "admin"} */}
-          {Array.isArray(posts) &&
+          {/* {Array.isArray(posts) &&
             posts.map((post) => (
-              // <div key={post.id} className="border rounded-lg p-4">
-              //   <h2 className="text-xl font-bold">{post.filename}</h2>
-
-              //   <img
-              //     src={post.thumbnail}
-              //     alt={post.title}
-              //     className="w-full h-48 object-cover"
-              //   />
-              //   <video
-              //     src={post.url}
-              //     controls
-              //     className="w-full h-48 object-cover"
-              //   ></video>
-              //   <p className="text-gray-700">{post.description}</p>
-              //   <div className="flex flex-wrap mt-2">
-              //     Tags:- {post.tags.map((tag) => (
-              //       <span
-              //         key={tag}
-              //         className="bg-gray-200 text-gray-800 py-1 px-2 rounded text-sm mr-2"
-              //       >
-              //         {tag}
-              //       </span>
-              //     ))}
-              //   </div>
-              //   <div className="flex flex-wrap mt-2">
-              //     Categories:- {post.categorys.map((category) => (
-              //       <span
-              //         key={category}
-              //         className="bg-gray-200 text-gray-800 py-1 px-2 rounded text-sm mr-2"
-              //       >
-              //         {category}
-              //       </span>
-              //     ))}
-              //   </div>
-              //   <div className="flex justify-between items-center mt-4">
-              //     <span className="text-gray-600">
-              //       Uploaded by: {post.uploadedBy}
-              //     </span>
-              //   </div>
-              //   <button className="mt-2 w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-200 cursor-pointer">
-              //     Post
-              //   </button>
-              // </div>
               <VideoCard key={post.id} post={post} />
-            ))}
-        </div>
-      </div>
+            ))} */}
+        {/* </div>
+      </div> */}
     </div>
   );
 };
